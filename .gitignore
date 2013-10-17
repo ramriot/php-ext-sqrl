@@ -23,3 +23,6 @@ run-tests.php
 Makefile*
 acinclude.m4
 /.libs
+.deps
+/src/.libs
+/src/*.lo
