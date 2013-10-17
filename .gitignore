@@ -1,0 +1,25 @@
+# http://www.gnu.org/software/automake
+
+Makefile.in
+
+# http://www.gnu.org/software/autoconf
+
+/autom4te.cache
+/aclocal.m4
+/compile
+/configure
+/depcomp
+/install-sh
+/missing
+libtool
+ltmain.sh
+mkinstalldirs
+/modules
+config*
+!config.m4
+/build
+run-tests.php
+*.la
+Makefile*
+acinclude.m4
+/.libs
