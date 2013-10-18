@@ -15,6 +15,8 @@ Installation
 	
 	git clone https://github.com/Novators/php-ext-sqrl.git
 	
+	cd php-ext-sqrl
+	
 	phpize && ./configure && make
 	
 
