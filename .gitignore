@@ -26,3 +26,4 @@ acinclude.m4
 .deps
 /src/.libs
 /src/*.lo
+*~

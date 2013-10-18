@@ -24,9 +24,11 @@ function testEnDeCode( $nLength ) {
 
 	if( extension_loaded("sqrl")) {
 		$error = false;
-		for( $i = 1; $i < 101; $i++ ) {
-			if( ! testEnDeCode( $i )) {
-				$error = true;
+		for( $i = 0; $i < 100; $i++ ) {
+			for( $j = 1; $j < 101; $j++ ) {
+				if( ! testEnDeCode( $j )) {
+					$error = true;
+				}
 			}
 		}
 		if( $error == false ) {

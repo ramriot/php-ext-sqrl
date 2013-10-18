@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 #include "squrl.h"
 
 static char encoding_table[] = {
@@ -20,6 +21,7 @@ void squrl_build_decoding_table() {
 
 	for (i = 0; i < 64; i++)
 		decoding_table[(unsigned char) encoding_table[i]] = i;
+	decoding_table[0] = 0;
 }
 
 
@@ -50,7 +52,13 @@ char *squrl_encode(const unsigned char *data,
 		encoded_data[j++] = encoding_table[(triple >> 1 * 6) & 0x3F];
 		encoded_data[j++] = encoding_table[(triple >> 0 * 6) & 0x3F];
 	}
-
+	if( (input_length % 3) > 0 ) {
+	  if( (input_length % 3) > 1 ) {
+	    *output_length = *output_length - 1;
+	  } else {
+	    *output_length = *output_length - 2;
+	  }
+	}
 	return encoded_data;
 }
 
@@ -58,27 +66,23 @@ unsigned char *squrl_decode(const char *data,
 							 int input_length,
 							 int *output_length) {
 	int i, j;
+
 	if (decoding_table == NULL) squrl_build_decoding_table();
-	if (input_length % 4 != 0) return NULL;
-
-	*output_length = input_length / 4 * 3;
-	if (data[input_length - 1] == '=') (*output_length)--;
-	if (data[input_length - 2] == '=') (*output_length)--;
-
+	*output_length = ceil(input_length / 4.0) * 3;
+	
 	unsigned char *decoded_data = malloc(*output_length);
 	if (decoded_data == NULL) return NULL;
 
+	uint32_t sextet_a, sextet_b, sextet_c, sextet_d, triple;
 	for (i = 0, j = 0; i < input_length;) {
 
-		uint32_t sextet_a = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
-		uint32_t sextet_b = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
-		uint32_t sextet_c = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
-		uint32_t sextet_d = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
-
-		uint32_t triple = (sextet_a << 3 * 6)
-		+ (sextet_b << 2 * 6)
-		+ (sextet_c << 1 * 6)
-		+ (sextet_d << 0 * 6);
+		sextet_a = (i < input_length) ? decoding_table[data[i++]] : 0;
+		sextet_b = (i < input_length) ? decoding_table[data[i++]] : 0;
+		sextet_c = (i < input_length) ? decoding_table[data[i++]] : 0;
+		sextet_d = (i < input_length) ? decoding_table[data[i++]] : 0;
+		
+		triple = (sextet_a << 3 * 6) + (sextet_b << 2 * 6)
+				+ (sextet_c << 1 * 6) + (sextet_d << 0 * 6);
 
 		if (j < *output_length) decoded_data[j++] = (triple >> 2 * 8) & 0xFF;
 		if (j < *output_length) decoded_data[j++] = (triple >> 1 * 8) & 0xFF;
