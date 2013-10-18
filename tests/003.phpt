@@ -23,14 +23,13 @@ function randomString( $len ) {
 }
 
 function runTestString( $str ) {
-	$parts = explode( ":", $str );
-	if( count( $parts ) < 4 ) {
+	$parts = explode( "+", trim($str) );
+	if( count( $parts ) < 3 ) {
 		print "Bad input data...\n";
 		return false;
 	}
-	$sk = sqrl_encode( unHex( substr( $parts[0], 0, 64 )));
-	$pk = sqrl_encode( unHex( substr( $parts[0], 64 )));
-	$sig = sqrl_encode( unHex( $parts[3] ));
+	$pk = $parts[0];
+	$sig = $parts[1];
 	$msg = unHex( $parts[2] );
 	$v = sqrl_verify( $msg, $sig, $pk );
 	if( strlen( $msg == 0 )) 
@@ -44,26 +43,23 @@ function runTestString( $str ) {
 	return false;
 }
 
-
-	if( extension_loaded("sqrl")) {
-		$handle = @fopen( "tests/sign.input", "r" );
-		$error = false;
-		$line = 1;
-		if( $handle ) {
-			while(( $buffer = fgets( $handle, 8192 )) !== false ) {
-				if( !runTestString( $buffer )) {
-					$error = true;
-				}
-				$line++;
-			}
-			fclose( $handle );
-		} else {
-			print "Unable to open file...\n";
+$handle = @fopen( "tests/003.input", "r" );
+$error = false;
+$line = 1;
+if( $handle ) {
+	while(( $buffer = fgets( $handle, 8192 )) !== false ) {
+		if( !runTestString( $buffer )) {
+			$error = true;
 		}
-		if( $line > 1000 && $error == false ) {
-			print "TRUE";
-		}
+		$line++;
 	}
+	fclose( $handle );
+} else {
+	print "Unable to open file...\n";
+}
+if( $line > 1000 && $error == false ) {
+	print "TRUE";
+}
 ?>
 --EXPECT--
 TRUE

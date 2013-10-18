@@ -2,6 +2,9 @@ PHP-EXT-SQRL
 ============
 This is an implementation of parts of the (as yet incomplete) [Secure QR Login](https://www.grc.com/sqrl/sqrl.htm) Specification implemented in C as a PHP extension.  Currently only tested on 64bit linux systems.
 
+This is *much* faster than it's pure PHP counterpart... Passes all 1024 ed25519.cr.yp.to tests in 0.35 seconds total on an old Core 2 machine.
+
+
 Installation Requirements
 -------------------------
 * Linux build environment (autotools, etc)
