@@ -1,6 +1,3 @@
---TEST--
-Test Signature Validation
---FILE--
 <?php
 function unHex( $str ) {
 	return pack( 'H*', $str );
@@ -36,23 +33,23 @@ function runTestString( $str ) {
 	return false;
 }
 
-$handle = @fopen( "tests/003.input", "r" );
-$error = false;
-$line = 1;
-if( $handle ) {
-	while(( $buffer = fgets( $handle, 8192 )) !== false ) {
-		if( !runTestString( $buffer )) {
-			$error = true;
+for( $i = 0; $i < 100; $i++ ) {
+	$handle = @fopen( "tests/003.input", "r" );
+	$error = false;
+	$line = 1;
+	if( $handle ) {
+		while(( $buffer = fgets( $handle, 8192 )) !== false ) {
+			if( !runTestString( $buffer )) {
+				$error = true;
+			}
+			$line++;
 		}
-		$line++;
+		fclose( $handle );
+	} else {
+		print "Unable to open file...\n";
 	}
-	fclose( $handle );
-} else {
-	print "Unable to open file...\n";
-}
-if( $line > 1000 && $error == false ) {
-	print "TRUE";
+	if( $error ) {
+		print "Something went wrong...\n";
+	}
 }
 ?>
---EXPECT--
-TRUE

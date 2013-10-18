@@ -131,6 +131,8 @@ PHP_FUNCTION(sqrl_gen_pk)
 	unsigned char pRet[pkurl_len+1];
 	memcpy( pRet, pkurl, pkurl_len );
 	pRet[pkurl_len] = 0;
+	
+	free(sk);
 	free( pkurl );
 
 	RETURN_STRING( pRet, 1 );
@@ -156,7 +158,8 @@ PHP_FUNCTION(sqrl_verify)
 	sig = squrl_decode( sigurl, sigurl_length, &iSig );
 	
 	nResult = ed25519_sign_open( msg, msg_length, pk, sig );
-
+	free(pk);
+	free(sig);
 	if( nResult == 0 ) {
 		RETURN_TRUE;
 	} else {
