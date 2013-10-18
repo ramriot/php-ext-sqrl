@@ -24,11 +24,25 @@ function testEnDeCode( $nLength ) {
 
 	if( extension_loaded("sqrl")) {
 		$error = false;
-		for( $i = 0; $i < 100; $i++ ) {
-			for( $j = 1; $j < 101; $j++ ) {
-				if( ! testEnDeCode( $j )) {
-					$error = true;
-				}
+		$tests = array( 
+			"" => "",
+			"f" => "Zg",
+			"fo" => "Zm8",
+			"foo" => "Zm9v",
+			"foob" => "Zm9vYg",
+			"fooba" => "Zm9vYmE",
+			"foobar" => "Zm9vYmFy"
+		);
+
+		foreach( $tests as $key => $value ) {
+			if( sqrl_encode( $key ) != $value || sqrl_decode( $value ) != $key ) {
+				$error = true;
+			}
+		}
+
+		for( $i = 1; $i < 311; $i++ ) {
+			if( ! testEnDeCode( $i )) {
+				$error = true;
 			}
 		}
 		if( $error == false ) {
