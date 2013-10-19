@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include "php.h"
 #include "squrl.h"
 
 static char encoding_table[] = {
@@ -17,7 +18,7 @@ static char *decoding_table = NULL;
 
 void squrl_build_decoding_table() {
 	int i;
-	decoding_table = malloc(256);
+	decoding_table = emalloc(256);
 
 	for (i = 0; i < 64; i++)
 		decoding_table[(unsigned char) encoding_table[i]] = i;
@@ -26,7 +27,7 @@ void squrl_build_decoding_table() {
 
 
 void squrl_cleanup() {
-	free(decoding_table);
+	if (decoding_table != NULL)	efree(decoding_table);
 }
 
 char *squrl_encode(const unsigned char *data,
@@ -36,7 +37,7 @@ char *squrl_encode(const unsigned char *data,
 	int i, j;
 	*output_length = 4 * ((input_length + 2) / 3);
 
-	char *encoded_data = malloc(*output_length);
+	char *encoded_data = emalloc(*output_length);
 	if (encoded_data == NULL) return NULL;
 
 	for (i = 0, j = 0; i < input_length;) {
@@ -70,7 +71,7 @@ unsigned char *squrl_decode(const char *data,
 	if (decoding_table == NULL) squrl_build_decoding_table();
 	*output_length = ceil(input_length / 4.0) * 3;
 	
-	unsigned char *decoded_data = malloc(*output_length);
+	unsigned char *decoded_data = emalloc(*output_length);
 	if (decoded_data == NULL) return NULL;
 
 	uint32_t sextet_a, sextet_b, sextet_c, sextet_d, triple;

@@ -62,7 +62,7 @@ PHP_FUNCTION(sqrl_encode)
 	unsigned char pRet[outputLength+1];
 	memcpy( pRet, pOutput, outputLength );
 	pRet[outputLength] = 0;
-	free( pOutput );
+	efree( pOutput );
 	RETURN_STRING( pRet, 1 );
 }
 
@@ -84,7 +84,7 @@ PHP_FUNCTION(sqrl_decode)
 	unsigned char pRet[outputLength+1];
 	memcpy( pRet, pOutput, outputLength );
 	pRet[outputLength] = 0;
-	free( pOutput );
+	efree( pOutput );
 	RETURN_STRING( pRet, 1 );
 }
 
@@ -104,7 +104,7 @@ PHP_FUNCTION(sqrl_gen_sk)
 	unsigned char pRet[i+1];
 	memcpy( pRet, pEncSk, i );
 	pRet[i] = 0;
-	free( pEncSk );
+	efree( pEncSk );
 	RETURN_STRING( pRet, 1 );
 }
 
@@ -132,8 +132,8 @@ PHP_FUNCTION(sqrl_gen_pk)
 	memcpy( pRet, pkurl, pkurl_len );
 	pRet[pkurl_len] = 0;
 	
-	free(sk);
-	free( pkurl );
+	efree(sk);
+	efree( pkurl );
 
 	RETURN_STRING( pRet, 1 );
 }
@@ -158,8 +158,8 @@ PHP_FUNCTION(sqrl_verify)
 	sig = squrl_decode( sigurl, sigurl_length, &iSig );
 	
 	nResult = ed25519_sign_open( msg, msg_length, pk, sig );
-	free(pk);
-	free(sig);
+	efree(pk);
+	efree(sig);
 	if( nResult == 0 ) {
 		RETURN_TRUE;
 	} else {
@@ -193,8 +193,8 @@ PHP_FUNCTION(sqrl_sign)
 	unsigned char pRet[iSigUrl+1];
 	memcpy( pRet, sigurl, iSigUrl );
 	pRet[iSigUrl] = 0;
-	free( sigurl );
-	free( pSk );
+	efree( sigurl );
+	efree( pSk );
 	RETURN_STRING( pRet, 1 );
 }
 
