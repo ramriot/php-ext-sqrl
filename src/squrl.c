@@ -18,7 +18,7 @@ static char *decoding_table = NULL;
 
 void squrl_build_decoding_table() {
 	int i;
-	decoding_table = emalloc(256);
+	decoding_table = malloc(256);
 
 	for (i = 0; i < 64; i++)
 		decoding_table[(unsigned char) encoding_table[i]] = i;
@@ -27,7 +27,7 @@ void squrl_build_decoding_table() {
 
 
 void squrl_cleanup() {
-	if (decoding_table != NULL)	efree(decoding_table);
+	if (decoding_table != NULL)	free(decoding_table);
 }
 
 char *squrl_encode(const unsigned char *data,
