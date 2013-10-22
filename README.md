@@ -4,48 +4,60 @@ This is an implementation of parts of the (as yet incomplete) [Secure QR Login](
 
 This is *much* faster than it's pure PHP counterpart... Passes all 1024 ed25519.cr.yp.to tests in 0.35 seconds total on an old Core 2 machine.
 
+Features
+========
+* Generate Secret Key (bad rng, not for production work)
+* Derive Public Key from Secret Key
+* Sign Message
+* Verify Message Signature
+* Encode/Decode base64url
+* Create QR code image (png)
 
 Installation Requirements
 -------------------------
 * Linux build environment (autotools, etc)
 * php5
 * php5-dev
-* libqrencode
-* libpng
+* [libqrencode](http://fukuchi.org/works/qrencode/)
+* [libpng](http://www.libpng.org/pub/png/libpng.html)
 
 Installation
 ------------
 * Download, configure, and make:
 
-	
 	git clone https://github.com/Novators/php-ext-sqrl.git
-	
 	cd php-ext-sqrl
-	
 	phpize && ./configure && make
-	
 
-* Run Tests, if desired (may take a few seconds)
-
-	
-	make test
-	
-
-* Install
-
-	
-	sudo make install
-	
-
-* Enable the sqrl extension in php.ini:
-
-	
-	extension=sqrl.so
-	
+* Run Tests: `make test`
+* Install: `sudo make install`
+* Enable the sqrl extension in php.ini: `extension=sqrl.so`
 
 Documentation
 -------------
-Coming soon...
+* Encode / Decode base64url
+
+	
+	$encoded = sqrl_encode( $plain );
+	$decoded = sqrl_decode( $encoded );
+	$decoded == plain // true
+	
+
+* Verify Signature
+
+	
+	$result = sqrl_verify( $message, $signature, $pk );
+	// $message = plain text of signed message
+	// $signature = base64url-encoded signature
+	// $pk = base64url-encoded Public Key
+	
+
+* Create QR code image
+
+	header( 'content-type: image/png' );
+	sqrl_code_png( $content );
+	// Encodes $content into a QR code image and output that image.
+	
 
 Acknowledgments
 ---------------
