@@ -24,7 +24,7 @@ void sqrgen_write_flush( png_structp png )
 int sqrgen_print_png(QRcode *qrcode)
 {
 	static int size = 3;
-	static int margin = -1;
+	static int margin = 2;
 	static int dpi = 72;
 	static unsigned int fg_color[4] = {0, 0, 0, 255};
 	static unsigned int bg_color[4] = {255, 255, 255, 255};
