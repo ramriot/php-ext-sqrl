@@ -28,7 +28,6 @@ int sqrgen_print_png(QRcode *qrcode)
 	static unsigned int fg_color[4] = {0, 0, 0, 255};
 	static unsigned int bg_color[4] = {255, 255, 255, 255};
 
-	static FILE *fp; // avoid clobbering by setjmp.
 	png_structp png_ptr;
 	png_infop info_ptr;
 	png_colorp palette;
@@ -130,7 +129,6 @@ int sqrgen_print_png(QRcode *qrcode)
 	png_write_end(png_ptr, info_ptr);
 	png_destroy_write_struct(&png_ptr, &info_ptr);
 
-	fclose(fp);
 	efree(row);
 	efree(palette);
 
