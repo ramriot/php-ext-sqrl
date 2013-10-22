@@ -44,13 +44,14 @@ char *squrl_encode(const unsigned char *data,
 	char *encoded_data = emalloc(*output_length);
 	if (encoded_data == NULL) return NULL;
 
+	uint32_t octet_a, octet_b, octet_c, triple;
 	for (i = 0, j = 0; i < input_length;) {
 
-		uint32_t octet_a = i < input_length ? data[i++] : 0;
-		uint32_t octet_b = i < input_length ? data[i++] : 0;
-		uint32_t octet_c = i < input_length ? data[i++] : 0;
+		octet_a = i < input_length ? data[i++] : 0;
+		octet_b = i < input_length ? data[i++] : 0;
+		octet_c = i < input_length ? data[i++] : 0;
 
-		uint32_t triple = (octet_a << 0x10) + (octet_b << 0x08) + octet_c;
+		triple = (octet_a << 0x10) + (octet_b << 0x08) + octet_c;
 
 		encoded_data[j++] = encoding_table[(triple >> 3 * 6) & 0x3F];
 		encoded_data[j++] = encoding_table[(triple >> 2 * 6) & 0x3F];
