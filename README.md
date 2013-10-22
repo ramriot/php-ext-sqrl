@@ -38,13 +38,13 @@ phpize && ./configure && make
 Documentation
 -------------
 * Encode / Decode base64url
-```
+```php
 $encoded = sqrl_encode( $plain );
 $decoded = sqrl_decode( $encoded );
 $decoded == plain // true
 ```
 * Verify Signature
-```
+```php
 $result = sqrl_verify( $message, $signature, $pk );
 // $message = plain text of signed message
 // $signature = base64url-encoded signature
@@ -52,7 +52,7 @@ $result = sqrl_verify( $message, $signature, $pk );
 ```
 
 * Create QR code image
-```
+```php
 header( 'content-type: image/png' );
 sqrl_code_png( $content );
 // Encodes $content into a QR code image and output that image.
