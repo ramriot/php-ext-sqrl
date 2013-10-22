@@ -10,6 +10,7 @@ PHP_FUNCTION(sqrl_gen_sk);
 PHP_FUNCTION(sqrl_gen_pk);
 PHP_FUNCTION(sqrl_encode);
 PHP_FUNCTION(sqrl_decode);
+PHP_FUNCTION(sqrl_code_png);
 
 extern zend_module_entry sqrl_module_entry;
 #define phpext_sqrl_ptr &sqrl_module_entry

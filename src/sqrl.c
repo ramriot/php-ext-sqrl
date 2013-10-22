@@ -2,13 +2,16 @@
 #include "config.h"
 #endif
 
-#include "php.h"
-#include "ed25519.h"
-#include "squrl.h"
-#include "php_sqrl.h"
-
+#include <png.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <qrencode.h>
+
+#include "php.h"
+#include "ed25519.h"
+#include "sqrgen.h"
+#include "squrl.h"
+#include "php_sqrl.h"
 
 
 
@@ -19,6 +22,7 @@ static function_entry sqrl_functions[] = {
 	PHP_FE(sqrl_gen_pk, NULL)
 	PHP_FE(sqrl_encode, NULL)
 	PHP_FE(sqrl_decode, NULL)
+	PHP_FE(sqrl_code_png, NULL)
 	{NULL,NULL,NULL}
 };
 
@@ -171,9 +175,9 @@ PHP_FUNCTION(sqrl_sign)
 {
 	const unsigned char *pMessage;
 	const unsigned char *pSkUrl;
-	const unsigned char *pSk;
+	unsigned char *pSk;
 	unsigned char *sigurl;
-	unsigned char pk[32];
+	unsigned char *pk;
 	unsigned char sig[64];
 	int iMessage, iSkUrl, iSk, iSigUrl;
 	
@@ -187,7 +191,7 @@ PHP_FUNCTION(sqrl_sign)
 	}
 	pSk = squrl_decode( pSkUrl, iSkUrl, &iSk );
 	ed25519_publickey( pSk, pk );
-	ed25519_sign( pMessage, iMessage, pSk, &pk, sig );
+	ed25519_sign( pMessage, iMessage, pSk, pk, sig );
 	sigurl = squrl_encode( sig, 64, &iSigUrl );
 
 	unsigned char pRet[iSigUrl+1];
@@ -198,3 +202,31 @@ PHP_FUNCTION(sqrl_sign)
 	RETURN_STRING( pRet, 1 );
 }
 
+PHP_FUNCTION(sqrl_code_png)
+{
+	QRcode *qrcode;
+	const unsigned char *pInput;
+	unsigned char *string;
+	int input_length;
+	
+	if( zend_parse_parameters( 
+		ZEND_NUM_ARGS() TSRMLS_CC, 
+		"s",
+		&pInput, &input_length
+	) == FAILURE ) {
+		RETURN_NULL();
+	}
+	
+	string = emalloc( input_length+1 );
+	memcpy( string, pInput, input_length );
+	string[input_length] = 0;
+	
+	qrcode = QRcode_encodeString(string, 0, QR_ECLEVEL_L, QR_MODE_8, 1);
+	if(qrcode == NULL) {
+		RETURN_FALSE;
+	}
+	sqrgen_print_png( qrcode );
+	QRcode_free(qrcode);
+	
+	RETURN_TRUE;
+}
