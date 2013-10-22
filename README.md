@@ -10,6 +10,8 @@ Installation Requirements
 * Linux build environment (autotools, etc)
 * php5
 * php5-dev
+* libqrencode
+* libpng
 
 Installation
 ------------
