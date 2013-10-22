@@ -25,9 +25,9 @@ Installation
 ------------
 * Download, configure, and make:
 
-	git clone https://github.com/Novators/php-ext-sqrl.git
-	cd php-ext-sqrl
-	phpize && ./configure && make
+    git clone https://github.com/Novators/php-ext-sqrl.git
+    cd php-ext-sqrl
+    phpize && ./configure && make
 
 * Run Tests: `make test`
 * Install: `sudo make install`
@@ -37,27 +37,22 @@ Documentation
 -------------
 * Encode / Decode base64url
 
-	
-	$encoded = sqrl_encode( $plain );
-	$decoded = sqrl_decode( $encoded );
-	$decoded == plain // true
-	
+    $encoded = sqrl_encode( $plain );
+    $decoded = sqrl_decode( $encoded );
+    $decoded == plain // true
 
 * Verify Signature
 
-	
-	$result = sqrl_verify( $message, $signature, $pk );
-	// $message = plain text of signed message
-	// $signature = base64url-encoded signature
-	// $pk = base64url-encoded Public Key
-	
+    $result = sqrl_verify( $message, $signature, $pk );
+    // $message = plain text of signed message
+    // $signature = base64url-encoded signature
+    // $pk = base64url-encoded Public Key
 
 * Create QR code image
 
-	header( 'content-type: image/png' );
-	sqrl_code_png( $content );
-	// Encodes $content into a QR code image and output that image.
-	
+    header( 'content-type: image/png' );
+    sqrl_code_png( $content );
+    // Encodes $content into a QR code image and output that image.
 
 Acknowledgments
 ---------------
