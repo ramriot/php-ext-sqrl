@@ -190,6 +190,7 @@ PHP_FUNCTION(sqrl_sign)
 		RETURN_NULL();
 	}
 	pSk = squrl_decode( pSkUrl, iSkUrl, &iSk );
+	pk = emalloc( 32 );
 	ed25519_publickey( pSk, pk );
 	ed25519_sign( pMessage, iMessage, pSk, pk, sig );
 	sigurl = squrl_encode( sig, 64, &iSigUrl );
@@ -199,6 +200,8 @@ PHP_FUNCTION(sqrl_sign)
 	pRet[iSigUrl] = 0;
 	efree( sigurl );
 	efree( pSk );
+	efree( pk );
+	
 	RETURN_STRING( pRet, 1 );
 }
 
@@ -226,6 +229,7 @@ PHP_FUNCTION(sqrl_code_png)
 		RETURN_FALSE;
 	}
 	sqrgen_print_png( qrcode );
+	efree( string );
 	QRcode_free(qrcode);
 	
 	RETURN_TRUE;

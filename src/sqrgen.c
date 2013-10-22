@@ -17,6 +17,7 @@ void sqrgen_write_data( png_structp png_ptr, png_bytep data, png_size_t length )
 
 void sqrgen_write_flush( png_structp png )
 {
+	php_end_ob_buffer( 1, 1 );
 	return;
 }
 
