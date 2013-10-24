@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "php.h"
-#include "squrl.h"
+#include "b64u.h"
 
 static char encoding_table[] = {
 	'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
@@ -20,7 +20,7 @@ static char encoding_table[] = {
 };
 static char *decoding_table = NULL;
 
-void squrl_build_decoding_table() {
+void b64u_build_decoding_table() {
 	int i;
 	decoding_table = malloc(256);
 
@@ -30,11 +30,11 @@ void squrl_build_decoding_table() {
 }
 
 
-void squrl_cleanup() {
+void b64u_cleanup() {
 	if (decoding_table != NULL)	free(decoding_table);
 }
 
-char *squrl_encode(const unsigned char *data,
+char *b64u_encode(const unsigned char *data,
 		int input_length,
 		int *output_length) {
 
@@ -68,12 +68,12 @@ char *squrl_encode(const unsigned char *data,
 	return encoded_data;
 }
 
-unsigned char *squrl_decode(const char *data,
+unsigned char *b64u_decode(const char *data,
 							 int input_length,
 							 int *output_length) {
 	int i, j;
 
-	if (decoding_table == NULL) squrl_build_decoding_table();
+	if (decoding_table == NULL) b64u_build_decoding_table();
 	*output_length = ceil(input_length / 4.0) * 3;
 	
 	unsigned char *decoded_data = emalloc(*output_length);

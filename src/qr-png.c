@@ -8,20 +8,20 @@
 #include <php.h>
 #include <qrencode.h>
 
-#include "sqrgen.h"
+#include "qr-png.h"
 
-void sqrgen_write_data( png_structp png_ptr, png_bytep data, png_size_t length ) 
+void qr_png_write_data( png_structp png_ptr, png_bytep data, png_size_t length ) 
 {
 	php_write( data, length );
 }
 
-void sqrgen_write_flush( png_structp png )
+void qr_png_write_flush( png_structp png )
 {
 	php_end_ob_buffer( 1, 1 );
 	return;
 }
 
-int sqrgen_print_png(QRcode *qrcode)
+int qr_png_print(QRcode *qrcode)
 {
 	static int size = 3;
 	static int margin = 2;
@@ -78,7 +78,7 @@ int sqrgen_print_png(QRcode *qrcode)
 	png_set_PLTE(png_ptr, info_ptr, palette, 2);
 	png_set_tRNS(png_ptr, info_ptr, alpha_values, 2, NULL);
 
-	png_set_write_fn( png_ptr, NULL, sqrgen_write_data, sqrgen_write_flush );
+	png_set_write_fn( png_ptr, NULL, qr_png_write_data, qr_png_write_flush );
 	png_set_IHDR(png_ptr, info_ptr,
 			realwidth, realwidth,
 			1,

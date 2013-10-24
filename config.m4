@@ -26,6 +26,6 @@ if test "$PHP_SQRL" = "yes"; then
 	],[
 		-L$QRENCODE -ldl
 	])
-	PHP_NEW_EXTENSION(sqrl, src/sqrgen.c src/squrl.c src/sqrl.c src/ed25519.c, $ext_shared)
+	PHP_NEW_EXTENSION(sqrl, src/qr-png.c src/b64u.c src/sqrl.c src/ed25519.c, $ext_shared)
 	PHP_SUBST(SQRL_SHARED_LIBADD)
 fi

@@ -9,8 +9,8 @@
 
 #include "php.h"
 #include "ed25519.h"
-#include "sqrgen.h"
-#include "squrl.h"
+#include "qr-png.h"
+#include "b64u.h"
 #include "php_sqrl.h"
 
 
@@ -60,7 +60,7 @@ PHP_FUNCTION(sqrl_encode)
 	) == FAILURE ) {
 		RETURN_NULL();
 	}
-	pOutput = squrl_encode( pInput, inputLength, &outputLength );
+	pOutput = b64u_encode( pInput, inputLength, &outputLength );
 
 	//pRet = malloc( outputLength+1 );
 	unsigned char pRet[outputLength+1];
@@ -83,7 +83,7 @@ PHP_FUNCTION(sqrl_decode)
 	) == FAILURE ) {
 		RETURN_NULL();
 	}
-	pOutput = squrl_decode( pInput, inputLength, &outputLength );
+	pOutput = b64u_decode( pInput, inputLength, &outputLength );
 
 	unsigned char pRet[outputLength+1];
 	memcpy( pRet, pOutput, outputLength );
@@ -102,7 +102,7 @@ PHP_FUNCTION(sqrl_gen_sk)
 		sk[i] = (unsigned char)(rand() % 256);
 	}
 	
-	pEncSk = squrl_encode( sk, 32, &i );
+	pEncSk = b64u_encode( sk, 32, &i );
 	
 	// PHP needs null terminated string...
 	unsigned char pRet[i+1];
@@ -128,9 +128,9 @@ PHP_FUNCTION(sqrl_gen_pk)
 		RETURN_NULL();
 	}
 	
-	sk = squrl_decode( skurl, skurl_len, &sk_len );
+	sk = b64u_decode( skurl, skurl_len, &sk_len );
 	ed25519_publickey(sk, pk);
-	pkurl = squrl_encode( pk, 32, &pkurl_len );
+	pkurl = b64u_encode( pk, 32, &pkurl_len );
 
 	unsigned char pRet[pkurl_len+1];
 	memcpy( pRet, pkurl, pkurl_len );
@@ -158,8 +158,8 @@ PHP_FUNCTION(sqrl_verify)
 	) == FAILURE ) {
 		RETURN_NULL();
 	}
-	pk = squrl_decode( pkurl, pkurl_length, &iPk );
-	sig = squrl_decode( sigurl, sigurl_length, &iSig );
+	pk = b64u_decode( pkurl, pkurl_length, &iPk );
+	sig = b64u_decode( sigurl, sigurl_length, &iSig );
 	
 	nResult = ed25519_sign_open( msg, msg_length, pk, sig );
 	efree(pk);
@@ -189,11 +189,11 @@ PHP_FUNCTION(sqrl_sign)
 	) == FAILURE ) {
 		RETURN_NULL();
 	}
-	pSk = squrl_decode( pSkUrl, iSkUrl, &iSk );
+	pSk = b64u_decode( pSkUrl, iSkUrl, &iSk );
 	pk = emalloc( 32 );
 	ed25519_publickey( pSk, pk );
 	ed25519_sign( pMessage, iMessage, pSk, pk, sig );
-	sigurl = squrl_encode( sig, 64, &iSigUrl );
+	sigurl = b64u_encode( sig, 64, &iSigUrl );
 
 	unsigned char pRet[iSigUrl+1];
 	memcpy( pRet, sigurl, iSigUrl );
@@ -228,7 +228,7 @@ PHP_FUNCTION(sqrl_code_png)
 	if(qrcode == NULL) {
 		RETURN_FALSE;
 	}
-	sqrgen_print_png( qrcode );
+	qr_png_print( qrcode );
 	efree( string );
 	QRcode_free(qrcode);
 	
