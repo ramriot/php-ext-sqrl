@@ -68,7 +68,7 @@ char *b64u_encode(const unsigned char *data,
 	return encoded_data;
 }
 
-unsigned char *b64u_decode(const char *data,
+unsigned char *b64u_decode(const unsigned char *data,
 							 int input_length,
 							 int *output_length) {
 	int i, j;
