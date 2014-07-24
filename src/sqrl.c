@@ -2,14 +2,14 @@
 #include "config.h"
 #endif
 
-#include <png.h>
+/*#include <png.h>*/
 #include <stdint.h>
 #include <stdlib.h>
-#include <qrencode.h>
+/*#include <qrencode.h>*/
 
 #include "php.h"
 #include "ed25519.h"
-#include "qr-png.h"
+/*#include "qr-png.h"*/
 #include "b64u.h"
 #include "php_sqrl.h"
 
@@ -22,7 +22,7 @@ static function_entry sqrl_functions[] = {
 	PHP_FE(sqrl_gen_pk, NULL)
 	PHP_FE(sqrl_encode, NULL)
 	PHP_FE(sqrl_decode, NULL)
-	PHP_FE(sqrl_code_png, NULL)
+	//PHP_FE(sqrl_code_png, NULL)
 	{NULL,NULL,NULL}
 };
 
@@ -204,7 +204,7 @@ PHP_FUNCTION(sqrl_sign)
 	
 	RETURN_STRING( pRet, 1 );
 }
-
+/*
 PHP_FUNCTION(sqrl_code_png)
 {
 	QRcode *qrcode;
@@ -234,3 +234,4 @@ PHP_FUNCTION(sqrl_code_png)
 	
 	RETURN_TRUE;
 }
+*/

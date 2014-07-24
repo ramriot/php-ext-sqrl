@@ -11,22 +11,22 @@ Features
 * Sign Message
 * Verify Message Signature
 * Encode/Decode base64url
-* Create QR code image (png)
+* (TBR) Create QR code image (png)
 
 Installation Requirements
 -------------------------
 * Linux build environment (autotools, etc)
 * php5
 * php5-dev
-* [libqrencode](http://fukuchi.org/works/qrencode/)
-* [libpng](http://www.libpng.org/pub/png/libpng.html)
+* (TBR)[libqrencode](http://fukuchi.org/works/qrencode/)
+* (TBR)[libpng](http://www.libpng.org/pub/png/libpng.html)
 
 Installation
 ------------
 * Download, configure, and make:
 
 ```
-git clone https://github.com/Novators/php-ext-sqrl.git
+git clone https://github.com/ramriot/php-ext-sqrl.git
 cd php-ext-sqrl
 phpize && ./configure && make
 ```
@@ -51,7 +51,7 @@ $result = sqrl_verify( $message, $signature, $pk );
 // $pk = base64url-encoded Public Key
 ```
 
-* Create QR code image
+*(TBR) Create QR code image
 ```php
 header( 'content-type: image/png' );
 sqrl_code_png( $content );
@@ -61,6 +61,7 @@ sqrl_code_png( $content );
 Acknowledgments
 ---------------
 * crypto code is from [ed25519-donna](https://github.com/floodyberry/ed25519-donna).
+* github user Novartors for providing the root of this fork
 
 License
 -------
