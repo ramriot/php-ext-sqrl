@@ -1,6 +1,6 @@
 PHP-EXT-SQRL
 ============
-This is an implementation of parts of the (as yet incomplete) [Secure QR Login](https://www.grc.com/sqrl/sqrl.htm) Specification implemented in C as a PHP extension.  Currently only tested on 64bit linux systems.
+This is an implementation of parts of the (as yet incomplete) [Secure QR Login](https://www.grc.com/sqrl/sqrl.htm) Specification implemented in C as a PHP extension. Specifically the ed25519 signature verification function.
 
 This is *much* faster than it's pure PHP counterpart... Passes all 1024 ed25519.cr.yp.to tests in 0.35 seconds total on an old Core 2 machine.
 
@@ -11,15 +11,12 @@ Features
 * Sign Message
 * Verify Message Signature
 * Encode/Decode base64url
-* (TBR) Create QR code image (png)
 
 Installation Requirements
 -------------------------
 * Linux build environment (autotools, etc)
 * php5
 * php5-dev
-* (TBR)[libqrencode](http://fukuchi.org/works/qrencode/)
-* (TBR)[libpng](http://www.libpng.org/pub/png/libpng.html)
 
 Installation
 ------------
@@ -51,13 +48,6 @@ $result = sqrl_verify( $message, $signature, $pk );
 // $pk = base64url-encoded Public Key
 ```
 
-*(TBR) Create QR code image
-```php
-header( 'content-type: image/png' );
-sqrl_code_png( $content );
-// Encodes $content into a QR code image and output that image.
-```
-
 Acknowledgments
 ---------------
 * crypto code is from [ed25519-donna](https://github.com/floodyberry/ed25519-donna).
@@ -65,4 +55,5 @@ Acknowledgments
 
 License
 -------
-This software is Public Domain.
+This software is covered under LGPL V3.0: http://www.gnu.org/licenses/gpl.html
+
